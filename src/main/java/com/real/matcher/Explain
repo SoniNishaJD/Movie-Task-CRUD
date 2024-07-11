@@ -1,0 +1,14 @@
+Overview of the Matcher Implementation
+This project involves creating a matching system that takes metadata from external movie providers and tries to match it with an internal movie database. The main class responsible for this functionality is MatcherImpl, which implements the Matcher interface. This class uses a set of helper utilities and data structures to read CSV files containing movie data and then performs the matching logic.
+
+Initialization and Database Import
+When an instance of MatcherImpl is created, it first initializes by importing the internal movie database. This is done in the constructor MatcherImpl(CsvStream movieDb, CsvStream actorAndDirectorDb), where the internal movie database and associated actors and directors are read from CSV files using the CSVReaderUtil utility class. These files are parsed and the data is stored in a list of Movie objects. The process is logged using the SLF4J logging framework, which helps track the progress and identify any issues during the data import phase.
+
+Matching Logic
+The core functionality of the MatcherImpl class is implemented in the match method. This method takes two parameters: the type of external database and the CSV stream of the external movie provider's data. The method reads the external movie data into a list of ProviderMovie objects. It then iterates over each ProviderMovie and tries to find the best match in the internal movie database by comparing various attributes like title, release year, actors, and director.
+
+Scoring Mechanism
+To determine the best match, the calculateMatchScore method is used. This method assigns a score based on how closely the attributes of a Movie object match those of a ProviderMovie object. If the titles match, a significant score is added. Additional points are given for matching release years, actors, and the director. The movie with the highest score is considered the best match. If a suitable match is found, it is recorded in a list of IdMapping objects, which pair the internal movie ID with the provider's media ID.
+
+Testing the Matcher
+The functionality of MatcherImpl is validated using a test class MatcherImplTest. This class uses JUnit 5 to define and run test cases. The setUp method initializes the test environment by creating instances of MatcherImpl with sample CSV data for movies and actors/directors. The testMatch method verifies that the matching algorithm correctly pairs provider movies with the internal database movies, while the testNoMatch method checks that movies with no corresponding match in the internal database are handled correctly. The assertions in these tests ensure the matching logic works as intended.
